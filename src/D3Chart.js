@@ -6,25 +6,53 @@ const HEIGHT = 300 - MARGIN.TOP - MARGIN.BOTTOM;
 
 class D3Chart {
 	constructor(element, data) {
-		let vis = this
+		let self = this
 
-		vis.g = d3.select(element)
+
+		self.data = data
+
+		self.g = d3.select(element)
 			.append("svg")
-				.attr("width", WIDTH + MARGIN.LEFT + MARGIN.RIGHT)
+				.attr("width"," 100%")
 				.attr("height", HEIGHT + MARGIN.TOP + MARGIN.BOTTOM)
 			.append("g")
 				.attr("transform", `translate(${MARGIN.LEFT}, ${MARGIN.TOP})`)
-		vis.x = d3.scaleLinear()
-		.domain()
-		.range()
+		// x width
+		self.x = d3.scaleLinear()
+			.range([0, WIDTH])
 
-		
-		vis.update()		
+		// y height
+		self.y = d3.scaleLinear()
+			.range([HEIGHT, 0])
+
+		self.update()		
 	}
 
 	update() {
-		let vis = this
-	
+		let self = this
+		self.x.domain([0, d3.max(self.data, d=>d.age)])
+		self.y.domain([0, d3.max(self.data, d=>d.height)])
+
+
+		//JOIN
+		const circles = self.g.selectAll("circle")
+		.data(self.data, d => d.name)
+
+		// exit
+		circles.exit().remove()
+
+		// update
+		circles
+		.attr("cx", d => self.x(d.age))
+		.attr("cy", d => self.y(d.height))
+
+		//enter
+		circles.enter().append("circle")
+		.attr("cx", d => self.x(d.age))
+		.attr("cy", d => self.y(d.height))
+		.attr("r", 5)
+		.attr("fill", "grey")
+
 	}
 }
 

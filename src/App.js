@@ -40,8 +40,8 @@ class App extends Component {
         </Navbar>
         <Container>
           <Row>
-            <Col md={6} xs={12}>{this.renderChart()}</Col>
-            <Col md={6} xs={12}></Col>
+            <Col md={12} xs={12}>{this.renderChart()}</Col>
+            <Col md={12} xs={12}></Col>
           </Row>
         </Container>
       </div>
